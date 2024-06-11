@@ -1,7 +1,15 @@
 class Shipment:
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, id, date, cargo_weight, distance_naut, duration_hours, average_speed, origin, destination, vessel) -> None:
+        self.id = id
+        self.date = date
+        self.cargo_weight = cargo_weight
+        self.distance_naut = distance_naut
+        self.duration_hours = duration_hours
+        self.average_speed = average_speed
+        self.origin = origin
+        self.destination = destination
+        self.vessel = vessel
 
     # Representation method
     # This will format the output in the correct order
