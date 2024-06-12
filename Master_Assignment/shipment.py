@@ -23,7 +23,7 @@ class Shipment:
 
         # Query to get origin port details
         cur.execute("""SELECT * FROM ports
-                    WHERE id = ?""", (self.origin))
+                    WHERE id = ?""", (self.origin,))
         origin_port_data = cur.fetchone()
         if origin_port_data:
             origin_port = Port(origin_port_data[0], origin_port_data[1], origin_port_data[2], origin_port_data[3], 
@@ -33,7 +33,7 @@ class Shipment:
 
         # Query to get destination port details
         cur.execute("""SELECT * FROM ports
-                    WHERE id = ?""", (self.destination))
+                    WHERE id = ?""", (self.destination,))
         destination_port_data = cur.fetchone()
         if destination_port_data:
             destination_port = Port(destination_port_data[0], destination_port_data[1], destination_port_data[2], 
@@ -52,7 +52,7 @@ class Shipment:
         cur = con.cursor() # Cursor to interact with the database
 
         cur.execute("""SELECT * FROM vessels 
-                    WHERE imo = ?""", (self.vessel))
+                    WHERE imo = ?""", (self.vessel,))
         vessel_data = cur.fetchone()
         if vessel_data:
             vessel = Vessel(vessel_data[0], vessel_data[1], vessel_data[2], vessel_data[3], vessel_data[4], 
@@ -122,8 +122,18 @@ class Shipment:
         
         return formatting[to_format]
 
+
     # Representation method
     # This will format the output in the correct order
     # Format is @dataclass-style: Classname(attr=value, attr2=value2, ...)
     def __repr__(self) -> str:
         return "{}({})".format(type(self).__name__, ", ".join([f"{key}={value!s}" for key, value in self.__dict__.items()]))
+
+
+shipment = Shipment("78067E7F-D833-4312-A805-C1355F51F065", date(2023, 1, 1), 15649, 5879.249, 864.595, 6.8, "MYTPP", "TRGEM", 9913547)
+print(shipment)
+#print(shipment.get_ports())
+#print(shipment.get_vessel())
+#print(shipment.calculate_fuel_costs(1))
+#print(shipment.convert_speed("Kmph"))
+#print(shipment.convert_duration("%D:%H"))
