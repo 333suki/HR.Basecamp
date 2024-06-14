@@ -10,25 +10,25 @@ class Port:
         self.province = province
         self.country = country
 
-    def get_shipments(self): # Returns a tuple of Shipments for this port (can be origin or destination)
-        from shipment import Shipment # Import the Shipment class
+    def get_shipments(self):  # Returns a tuple of Shipments for this port (can be origin or destination)
+        from shipment import Shipment  # Import the Shipment class
 
-        con = sqlite3.connect("shipments.db") # Connect to the database
-        cur = con.cursor() # Cursor to interact with the database
-        shipments = []
+        con = sqlite3.connect("shipments.db")  # Connect to the database
+        cur = con.cursor()  # Cursor to interact with the database
+        shipments = []  # Empty list to store the shipments
 
         query = """
         SELECT * FROM shipments
         WHERE origin = ? OR destination = ?
-        """ 
+        """  # Database query to select shipments where the port is origin or destination
 
-        cur.execute(query, [self.id, self.id])
-        results = cur.fetchall() # Fetch all (remaining) rows of query and return a list of tuples
-        for result in results:
+        cur.execute(query, [self.id, self.id])  # Execute the query
+        query_results = cur.fetchall()  # Fetch all (remaining) rows of query and return a list of tuples
+        for result in query_results:
             shipments.append(Shipment(result[0], result[1], result[2], result[3], result[4], result[5], result[6],
                                       result[7], result[8]))
 
-        con.close() # Close the connection
+        con.close()  # Close the connection
         return tuple(shipments)
 
     # Representation method
@@ -39,4 +39,4 @@ class Port:
 
 port = Port("MYTPP", 55750, "Tajung Pelepas", "Tanjung Pelepas", "Johor", "Malaysia")
 shipments = port.get_shipments()
-print(shipments)
+# print(shipments)
