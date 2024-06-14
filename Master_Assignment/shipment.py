@@ -18,8 +18,8 @@ class Shipment:
     def get_ports(self):
         from port import Port
 
-        con = sqlite3.connect("shipments.db") # Connect to the database
-        cur = con.cursor() # Cursor to interact with the database
+        con = sqlite3.connect("shipments.db")  # Connect to the database
+        cur = con.cursor()  # Cursor to interact with the database
 
         # Query to get origin port details
         cur.execute("""SELECT * FROM ports
@@ -41,15 +41,15 @@ class Shipment:
         else:
             None
 
-        con.close() # Close the connection to the database
+        con.close()  # Close the connection to the database
         return{"origin": origin_port, "destination": destination_port}
 
 
     def get_vessel(self):
         from vessel import Vessel
 
-        con = sqlite3.connect("shipments.db") # Connect to the database
-        cur = con.cursor() # Cursor to interact with the database
+        con = sqlite3.connect("shipments.db")  # Connect to the database
+        cur = con.cursor()  # Cursor to interact with the database
 
         cur.execute("""SELECT * FROM vessels 
                     WHERE imo = ?""", (self.vessel,))
@@ -58,22 +58,22 @@ class Shipment:
             vessel = Vessel(vessel_data[0], vessel_data[1], vessel_data[2], vessel_data[3], vessel_data[4], 
                             vessel_data[5], vessel_data[6], vessel_data[7], vessel_data[8], vessel_data[9])
         else:
-            None
+            vessel = None
 
-        con.close() # Close the connection to the database
+        con.close()  # Close the connection to the database
         return vessel
 
 
     def calculate_fuel_costs(self, price_per_liter):
-        vessel = self.get_vessel() # Get the vessel object
+        vessel = self.get_vessel()  # Get the vessel object
         if not vessel:
             raise ValueError("Vessel not found")
-        
-        fuel_consumption = vessel.get_fuel_consumption(self.distance_naut) # Fuel consumption for given distance
-        total_fuel_used = fuel_consumption * self.duration_hours # Total fuel used
 
-        total_price = total_fuel_used * price_per_liter # Calculate total price
-        return round(total_price, 3) # Return the total price rounded up by 3 decimals
+        fuel_consumption = vessel.get_fuel_consumption(self.distance_naut)  # Fuel consumption for given distance
+        total_fuel_used = fuel_consumption * self.duration_hours  # Total fuel used
+
+        total_price = total_fuel_used * price_per_liter  # Calculate total price
+        return round(total_price, 3)  # Return the total price rounded up by 3 decimals
 
 
     def convert_speed(self, to_format):
@@ -82,7 +82,7 @@ class Shipment:
             "Mph": 1.15078,
             "Kmph": 1.852
         }
-        
+
         if to_format not in conversion_options:
             raise ValueError("Unsupported format")
 
@@ -116,10 +116,10 @@ class Shipment:
             "%M": f"{int(total_minutes)}",
             "%D:%H": f"{int(days)}:{int(hours)}",
         }
-        
+
         if to_format not in formatting:
             raise ValueError("Unsupported format")
-        
+
         return formatting[to_format]
 
 
@@ -131,9 +131,22 @@ class Shipment:
 
 
 shipment = Shipment("78067E7F-D833-4312-A805-C1355F51F065", date(2023, 1, 1), 15649, 5879.249, 864.595, 6.8, "MYTPP", "TRGEM", 9913547)
-print(shipment)
-#print(shipment.get_ports())
-#print(shipment.get_vessel())
-#print(shipment.calculate_fuel_costs(1))
-#print(shipment.convert_speed("Kmph"))
-#print(shipment.convert_duration("%D:%H"))
+# print(shipment)
+# print(shipment.get_ports())
+# print(shipment.get_vessel())
+# print(shipment.calculate_fuel_costs(1))
+# print(shipment.convert_duration("%D"))
+# print(shipment.convert_duration("%H"))
+# print(shipment.convert_duration("%M"))
+# print(shipment.convert_duration("%D:%H"))
+# print(shipment.convert_distance("NM"))
+# print(shipment.convert_distance("M"))
+# print(shipment.convert_distance("KM"))
+# print(shipment.convert_distance("MI"))
+# print(shipment.convert_distance("YD"))
+# print(shipment.convert_distance("A"))
+# print(shipment.convert_speed("Knts"))
+# print(shipment.convert_speed("Mph"))
+# print(shipment.convert_speed("Kmph"))
+# print(shipment.calculate_fuel_costs(1500))
+# print(shipment.get_ports())
